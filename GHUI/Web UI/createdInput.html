@@ -1,0 +1,81 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>UI</title>
+<style>
+body{
+    font-family: Arial, sans-serif;
+    margin:10px;
+}
+.container{
+    margin-top:15px;
+}
+.slider{
+    width:300px;
+}
+.output{
+    width:100%;
+    height:100px;
+    background:rgb(204, 204, 204);
+    padding:10px;
+    margin-top:20px;
+}
+</style>
+</head>
+
+<body>
+
+<h1 id="myTitle">Hello GH</h1>
+<h3>A web-based user-interface package for Grasshopper!</h3>
+
+<div class="container">
+    <input type="button" id="myButton2" value="Run My Script!">
+    <input type="text" id="myTextBox" value="Name?" style="margin-left:10px;">
+</div>
+
+<div class="container">
+    <label>Slider 1</label>
+    <input type="range" id="mySlider" class="slider" value="50" min="0" max="100">
+    <span id="sliderValue1">50</span>
+</div>
+
+<div class="container">
+    <label>Slider 2</label>
+    <input type="range" id="mySlider2" class="slider" value="50" min="0" max="100">
+    <span id="sliderValue2">50</span>
+</div>
+
+<div class="output">
+    <h3>Distance in Rhino:</h3>
+    <h3 id="myLabel">label</h3>
+</div>
+
+<script>
+const slider1 = document.getElementById("mySlider");
+const slider2 = document.getElementById("mySlider2");
+const sliderValue1 = document.getElementById("sliderValue1");
+const sliderValue2 = document.getElementById("sliderValue2");
+const label = document.getElementById("myLabel");
+
+slider1.oninput = function(){
+    sliderValue1.innerText = this.value;
+}
+
+slider2.oninput = function(){
+    sliderValue2.innerText = this.value;
+}
+
+document.getElementById("myButton2").onclick = function(){
+    const name = document.getElementById("myTextBox").value;
+    const v1 = slider1.value;
+    const v2 = slider2.value;
+
+    label.innerText = "Name: " + name + " | Slider1: " + v1 + " | Slider2: " + v2;
+}
+</script>
+
+</body>
+</html>
+
