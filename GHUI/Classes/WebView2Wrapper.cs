@@ -158,11 +158,36 @@ namespace GHUI.Classes
         /// What to do when WebView is initialized.(Navigate to the source, and add the any JS scripts/functions
         /// which need to be defined at startup)
         /// </summary>
+        //private async void OnWebViewInitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
+        //{
+        //    if (_webView?.CoreWebView2 == null) return;
+
+        //    // inject JS first
+        //    await _webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+        //        Properties.Resources.AddDocumentClickListener);
+
+        //    await _webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+        //        Properties.Resources.QueryInputElementsInDOM);
+
+        //    await _webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
+        //        Properties.Resources.SetValuesInDom);
+
+        //    // then load HTML
+        //    _webView.Source = new Uri(_htmlPath);
+        //}
+
         private async void OnWebViewInitializationCompleted(object sender, CoreWebView2InitializationCompletedEventArgs e)
         {
             if (_webView?.CoreWebView2 == null) return;
 
-            // inject JS first
+            string dir = Path.GetDirectoryName(_htmlPath);
+
+            // map virtual host to local folder
+            _webView.CoreWebView2.SetVirtualHostNameToFolderMapping(
+                "app",
+                dir,
+                CoreWebView2HostResourceAccessKind.Allow);
+
             await _webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                 Properties.Resources.AddDocumentClickListener);
 
@@ -172,8 +197,9 @@ namespace GHUI.Classes
             await _webView.CoreWebView2.AddScriptToExecuteOnDocumentCreatedAsync(
                 Properties.Resources.SetValuesInDom);
 
-            // then load HTML
-            _webView.Source = new Uri(_htmlPath);
+            // load via virtual host instead of file://
+            string index = "https://app/index.html";
+            _webView.CoreWebView2.Navigate(index);
         }
 
         private async void RunDomInputQuery(DomClickModel clickModel)
